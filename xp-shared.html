@@ -1,0 +1,115 @@
+<!--
+@license
+Copyright (c) 2015 The ExpandJS authors. All rights reserved.
+This code may only be used under the BSD style license found at https://expandjs.github.io/LICENSE.txt
+The complete set of authors may be found at https://expandjs.github.io/AUTHORS.txt
+The complete set of contributors may be found at https://expandjs.github.io/CONTRIBUTORS.txt
+-->
+
+<!--
+This element is used to share data across an application.
+
+@element xp-shared
+@description A custom element used to share data across a an application
+@keywords web app, html5, expandjs, web-components
+@group functionality
+@homepage http://expandjs.com/elements/xp-shared
+
+@dependency polymer Polymer/polymer
+@dependency expandjs ExpandJS/expandjs
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../expandjs/expandjs.html">
+
+<script>
+    Polymer({
+
+        // ELEMENT
+        is: 'xp-shared',
+
+        /*********************************************************************/
+
+        /**
+         * Updates the instance's data.
+         *
+         * @method _update
+         * @param {*} data
+         * @returns {Element}
+         * @private
+         */
+        _update: function (data) {
+            var self = this;
+            self._setUpdating(data !== self.data);
+            self._setData(data);
+            return self;
+        },
+
+        /*********************************************************************/
+
+        // PROPERTIES
+        properties: {
+
+            /**
+             * The shared data.
+             *
+             * @attribute data
+             * @type Object
+             * @default {}
+             * @notifies
+             * @readOnly
+             */
+            data: {
+                notify: true,
+                observer: '_dataChanged',
+                readOnly: true,
+                type: Object,
+                value: {}
+            },
+
+            /**
+             * Used to know if the instance is currently updating.
+             *
+             * @attribute updating
+             * @type boolean
+             * @default false
+             * @notifies
+             * @readonly
+             */
+            updating: {
+                notify: true,
+                readOnly: true,
+                reflectToAttribute: true,
+                type: Boolean,
+                vale: false
+            }
+        },
+
+        /**
+         * The list of instances.
+         *
+         * @property instances
+         * @type Array
+         * @default []
+         * @readonly
+         */
+        instances: [],
+
+        /*********************************************************************/
+
+        // OBSERVER
+        _dataChanged: function (post) {
+            var self = this;
+            if (arguments.length < 2) { return; }
+            if (self.updating) { self._setUpdating(false); return; }
+            XP.invoke(self.instances, '_update', post);
+        },
+
+        /*********************************************************************/
+
+        // LISTENER
+        ready: function () {
+            this.push('instances', this);
+        }
+    });
+</script>
