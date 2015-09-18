@@ -1,3 +1,3 @@
 # xp-shared
 
-See the [`documentation page`](http://expandjs.com/elements/xp-shared) for more information.
+This repository **is deprecated**. Use [`xp-shared-behavior`](https://github.com/expandjs/xp-shared-behavior) instead.
